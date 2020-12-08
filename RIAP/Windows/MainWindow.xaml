@@ -1,0 +1,38 @@
+﻿<mah:MetroWindow x:Class="JaINTP.RIAP.Windows.MainWindow"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+                 xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                 xmlns:Views="clr-namespace:JaINTP.RIAP.Views"
+                 mc:Ignorable="d"
+                 Height="250"
+                 Width="500"
+                 SizeToContent="Width"
+                 TitleCharacterCasing="Normal"
+                 GlowBrush="{DynamicResource MahApps.Brushes.Accent}"
+                 ResizeMode="NoResize"
+                 WindowStartupLocation="CenterScreen"
+                 Loaded="MetroWindow_LoadedAsync"
+                 DataContext="{Binding .}">
+
+    <!-- Local Resources. -->
+    <mah:MetroWindow.LeftWindowCommands>
+        <mah:WindowCommands>
+            <!-- Button Click={Binding Command} -->
+            <Button ToolTip="Open up the GitHub site"
+                    Click="LaunchGithub">
+                <iconPacks:PackIconModern Width="22"
+                                          Height="22"
+                                          Kind="SocialGithubOctocat" />
+            </Button>
+        </mah:WindowCommands>
+    </mah:MetroWindow.LeftWindowCommands>
+
+    <Grid>
+        <!-- Shitty hack to remove the extra margin on the right.
+             Not sure what's causing it... -->
+        <Views:MainView Margin="5,5,0,5" />
+    </Grid>
+</mah:MetroWindow>

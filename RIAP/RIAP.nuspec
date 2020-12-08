@@ -1,0 +1,22 @@
+﻿<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>RIAP</id>
+    <version>1.0.0</version>
+    <title>RIAP</title>
+    <authors>Jai Brown</authors>
+    <owners>Jai Brown</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <releaseNotes></releaseNotes>
+    <copyright>Copyright 2020</copyright>
+    <description>RIAP - Plays a randomly chosen file from a list at a random interval...</description>
+    <dependencies>
+      <group targetFramework=".NETFramework4.7.2" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="*.*"
+          target="lib\net472\"
+          exclude="*.pdb;*.nupkg;*.vshost.*" />
+  </files>
+</package>

@@ -4,7 +4,7 @@
 // Created          : 14-11-2020
 //
 // Last Modified By : Jai Brown
-// Last Modified On : 08-12-2020
+// Last Modified On : 09-12-2020
 // ***********************************************************************
 // <copyright file="App.xaml.cs" company="Jai Brown">
 //     Copyright (c) Jai Brown. All rights reserved.
@@ -22,8 +22,6 @@ using System.Net;
 using System.Reflection;
 using System.Windows;
 
-using Microsoft.AppCenter;
-using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
 
 #endregion Usings.
@@ -57,15 +55,13 @@ namespace JaINTP.RIAP.Windows
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "<Pending>")]
         private async void MetroWindow_LoadedAsync(object sender, System.Windows.RoutedEventArgs e)
         {
-            // AppCenter Stuff
-            AppCenter.LogLevel = LogLevel.Verbose;
-            AppCenter.Start("b6d3e798-014c-40da-ab88-f135ce4f3ae4",
-                   typeof(Analytics), typeof(Crashes));
-
-            // Squirrel stuff
+#if DEBUG
+                    // Don't update while in debug mode...
+#else
+            // Secret Squirrel business ;)
             try
             {
-                logger.Info("Attempting to fetch update information.");
+                logger.Debug("Attempting to fetch update information.");
                 using (var updateManager =
                     await UpdateManager.GitHubUpdateManager(@"https://github.com/JaINTP/RIAP"))
                 {
@@ -79,29 +75,29 @@ namespace JaINTP.RIAP.Windows
 
                     Title = lastVersion?.Version.ToString() == null ? "" : $" Updating to v{lastVersion?.Version.ToString()}";
                     logger.Debug($"Latest version: {lastVersion?.Version.ToString()}");
-#if DEBUG
-                    // Don't update while in debug mode...
-#else
                     await updateManager.DownloadReleases(new[] { lastVersion });
                     await updateManager.ApplyReleases(updates);
-                    var releaseEntry = await updateManager.UpdateApp();
+                    await updateManager.UpdateApp();
+
                     Title = $"Updated to v{lastVersion?.Version.ToString()}. Please restart!";
                     logger.Debug($"Updated to version {lastVersion?.Version.ToString()}");
-#endif
                 }
             }
             catch (WebException ex)
             {
                 logger.Error(ex, $"Squirrel had issues updating: {ex.Message}");
+                Crashes.TrackError(ex);
             }
             catch (Exception ex)
             {
                 logger.Error(ex, $"{ex.Message}");
+                Crashes.TrackError(ex);
             }
             finally
             {
                 Title = $"RIAP v{Assembly.GetExecutingAssembly().GetName().Version.ToString(3)}";
             }
+#endif
         }
 
         #endregion Event Handlers.

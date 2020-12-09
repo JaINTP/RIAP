@@ -4,7 +4,7 @@
 // Created          : 14-11-2020
 //
 // Last Modified By : Jai Brown
-// Last Modified On : 08-12-2020
+// Last Modified On : 09-12-2020
 // ***********************************************************************
 // <copyright file="App.xaml.cs" company="Jai Brown">
 //     Copyright (c) Jai Brown. All rights reserved.
@@ -15,6 +15,11 @@
 #region Usings
 
 using System.Windows;
+using System.Windows.Threading;
+using JaINTP.RIAP.Windows;
+using Microsoft.AppCenter;
+using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
 
 #endregion Usings
 
@@ -25,5 +30,20 @@ namespace JaINTP.RIAP
     /// </summary>
     public partial class App : Application
     {
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+
+            // Register with AppCenter
+            AppCenter.LogLevel = LogLevel.Verbose;
+            AppCenter.Start("b6d3e798-014c-40da-ab88-f135ce4f3ae4",
+                   typeof(Analytics), typeof(Crashes));
+
+
+            // Start main window.
+            MainWindow main = new MainWindow();
+            main.Show();
+        }
+
     }
 }

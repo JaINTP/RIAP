@@ -5,8 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:JaINTP.RIAP.ViewModels"
              xmlns:ignore="http://www.galasoft.ch/ignore"
-             mc:Ignorable="d ignore"
-             StartupUri="Windows/MainWindow.xaml">
+             mc:Ignorable="d ignore">
     <Application.Resources>
         <ResourceDictionary>
             <!--Global View Model Locator-->

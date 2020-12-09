@@ -39,11 +39,24 @@ namespace JaINTP.RIAP
             AppCenter.Start("b6d3e798-014c-40da-ab88-f135ce4f3ae4",
                    typeof(Analytics), typeof(Crashes));
 
+            // Add global exception handling.
+            Application.Current.DispatcherUnhandledException += new DispatcherUnhandledExceptionEventHandler(AppDispatcherUnhandledException);
 
             // Start main window.
             MainWindow main = new MainWindow();
             main.Show();
         }
 
+        private void AppDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+        {
+#if DEBUG
+            // Don't do shit if debugging.
+            e.Handled = false;
+
+#else
+            // Report those unhandled exceptions, bruh!
+            Crashes.TrackError(e.Exception);
+#endif
+        }
     }
 }

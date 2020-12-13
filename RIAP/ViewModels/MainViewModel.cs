@@ -4,7 +4,7 @@
 // Created          : 14-11-2020
 //
 // Last Modified By : Jai Brown
-// Last Modified On : 08-12-2020
+// Last Modified On : 13-12-2020
 // ***********************************************************************
 // <copyright file="MainViewModel.cs" company="Jai Brown">
 //     Copyright (c) Jai Brown. All rights reserved.
@@ -55,13 +55,14 @@ namespace JaINTP.RIAP.ViewModels
             RemoveCommand = new RelayCommand(RemoveCommandExecute);
             StartStopCommand = new RelayCommand(StartStopCommandExecute);
 
+            // Load the settings file.
+            settings = UserSettings.Load(configFile);
+
             // Checks to see if FileList is null. (Settings Hack)
-            FileList = Properties.Application.Default.FileList ?? new ObservableCollection<string>();
-            MinSeconds = Properties.Application.Default.MinSeconds;
-            MinMinutes = Properties.Application.Default.MinMinutes;
-            MaxSeconds = Properties.Application.Default.MaxSeconds;
-            MaxMinutes = Properties.Application.Default.MaxMinutes;
-            Volume = Properties.Application.Default.Volume;
+            settings.FileList = settings.FileList ?? new ObservableCollection<string>();
+
+            // Save
+            settings.Save(configFile);
 
             StartStopContent = "Start";
         }
@@ -74,18 +75,26 @@ namespace JaINTP.RIAP.ViewModels
         ~MainViewModel()
         {
             logger.Debug("Saving all user settings.");
-            Properties.Application.Default.MinSeconds = MinSeconds;
-            Properties.Application.Default.MaxSeconds = MaxSeconds;
-            Properties.Application.Default.MinMinutes = MinMinutes;
-            Properties.Application.Default.MaxMinutes = MaxMinutes;
-            Properties.Application.Default.FileList = FileList;
-            Properties.Application.Default.Volume = Volume;
-            Properties.Application.Default.Save();
+            settings.MinSeconds = MinSeconds;
+            settings.MaxSeconds = MaxSeconds;
+            settings.MinMinutes = MinMinutes;
+            settings.MaxMinutes = MaxMinutes;
+            settings.FileList = FileList;
+            settings.Volume = Volume;
+            settings.Save(configFile);
         }
 
         #endregion Destructors
 
         #region Fields.
+
+        // Ugly but idgaf.
+        private readonly string configFile = Path.Combine(
+            $"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}",
+            $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}",
+            "Settings.json");
+
+        private readonly UserSettings settings;
 
         private readonly IDialogService dialogService;
         private AudioHandler audioHandler;
@@ -107,10 +116,10 @@ namespace JaINTP.RIAP.ViewModels
         /// <value>The minimum minutes.</value>
         public int MinMinutes
         {
-            get => Properties.Application.Default.MinMinutes;
+            get => settings.MinMinutes;
             set
             {
-                Properties.Application.Default.MinMinutes = value;
+                settings.MinMinutes = value;
                 RaisePropertyChanged(nameof(MinMinutes));
             }
         }
@@ -121,10 +130,10 @@ namespace JaINTP.RIAP.ViewModels
         /// <value>The minimum seconds.</value>
         public int MinSeconds
         {
-            get => Properties.Application.Default.MinSeconds;
+            get => settings.MinSeconds;
             set
             {
-                Properties.Application.Default.MinSeconds = value;
+                settings.MinSeconds = value;
                 RaisePropertyChanged(nameof(MinSeconds));
             }
         }
@@ -135,10 +144,10 @@ namespace JaINTP.RIAP.ViewModels
         /// <value>The minimum minutes.</value>
         public int MaxMinutes
         {
-            get => Properties.Application.Default.MaxMinutes;
+            get => settings.MaxMinutes;
             set
             {
-                Properties.Application.Default.MaxMinutes = value;
+                settings.MaxMinutes = value;
                 RaisePropertyChanged(nameof(MaxMinutes));
             }
         }
@@ -149,10 +158,10 @@ namespace JaINTP.RIAP.ViewModels
         /// <value>The maximum seconds.</value>
         public int MaxSeconds
         {
-            get => Properties.Application.Default.MaxSeconds;
+            get => settings.MaxSeconds;
             set
             {
-                Properties.Application.Default.MaxSeconds = value;
+                settings.MaxSeconds = value;
                 RaisePropertyChanged(nameof(MaxSeconds));
             }
         }
@@ -165,10 +174,10 @@ namespace JaINTP.RIAP.ViewModels
         /// </value>
         public ObservableCollection<string> FileList
         {
-            get => Properties.Application.Default.FileList;
+            get => settings.FileList;
             set
             {
-                Properties.Application.Default.FileList = value;
+                settings.FileList = value;
                 RaisePropertyChanged(nameof(FileList));
             }
         }
@@ -181,10 +190,10 @@ namespace JaINTP.RIAP.ViewModels
         /// </value>
         public float Volume
         {
-            get { return Properties.Application.Default.Volume; }
+            get { return settings.Volume; }
             set
             {
-                Properties.Application.Default.Volume = value;
+                settings.Volume = value;
                 RaisePropertyChanged(nameof(Volume));
             }
         }

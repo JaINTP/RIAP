@@ -68,7 +68,6 @@ namespace JaINTP.RIAP.ViewModels
         /// </summary>
         public static void Cleanup()
         {
-            Properties.Application.Default.Save();
         }
 
         #endregion Methods

@@ -55,9 +55,6 @@ namespace JaINTP.RIAP.Windows
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "<Pending>")]
         private async void MetroWindow_LoadedAsync(object sender, System.Windows.RoutedEventArgs e)
         {
-#if DEBUG
-                    // Don't update while in debug mode...
-#else
             // Secret Squirrel business ;)
             try
             {
@@ -73,6 +70,9 @@ namespace JaINTP.RIAP.Windows
                         return;
                     }
 
+#if DEBUG
+                    // Don't update while in debug mode...
+#else
                     Title = lastVersion?.Version.ToString() == null ? "" : $" Updating to v{lastVersion?.Version.ToString()}";
                     logger.Debug($"Latest version: {lastVersion?.Version.ToString()}");
                     await updateManager.DownloadReleases(new[] { lastVersion });
@@ -81,6 +81,7 @@ namespace JaINTP.RIAP.Windows
 
                     Title = $"Updated to v{lastVersion?.Version.ToString()}. Please restart!";
                     logger.Debug($"Updated to version {lastVersion?.Version.ToString()}");
+#endif
                 }
             }
             catch (WebException ex)
@@ -97,7 +98,6 @@ namespace JaINTP.RIAP.Windows
             {
                 Title = $"RIAP v{Assembly.GetExecutingAssembly().GetName().Version.ToString(3)}";
             }
-#endif
         }
 
         #endregion Event Handlers.

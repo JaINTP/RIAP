@@ -267,12 +267,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Properties\Application.cs" />
-    <Compile Include="Properties\Application.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>Application.settings</DependentUpon>
-    </Compile>
+    <Compile Include="Models\SettingsHandler.cs" />
+    <Compile Include="Models\UserSettings.cs" />
     <Compile Include="Utilities\Behaviours\ListBoxSelectedItemsBehavior.cs" />
     <Compile Include="Utilities\Converters\InverseBooleanConverter.cs" />
     <Compile Include="Utilities\Converters\PathToFileNameConverter.cs" />
@@ -322,10 +318,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="packages.config" />
-    <None Include="Properties\Application.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Application.Designer.cs</LastGenOutput>
-    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -335,6 +327,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
